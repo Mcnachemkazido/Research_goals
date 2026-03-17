@@ -43,8 +43,28 @@ class Queries:
             return cursor.fetchall()
 
 
+    def visualization_target_trajectory(self,entity_id):
+        with self.connection.cursor() as cursor:
+
+            sql =   """SELECT reported_lat ,reported_lon
+                    FROM intel_signals
+                    WHERE entity_id = %s
+                    ORDER by timestamp
+                    """
+            cursor.execute(sql,(entity_id,))
+
+            return cursor.fetchall()
 
 
 
-q = Queries(my_coonection)
-print(q.finding_new_targets())
+# q = Queries(my_coonection)
+# res = q.visualization_target_trajectory('TGT-003')
+#
+# import matplotlib.pyplot as plt
+#
+#
+# x = [i[0] for i in res]
+# y = [i[1] for i in res]
+# plt.plot(x, y,'o:r')
+#
+# plt.show()
