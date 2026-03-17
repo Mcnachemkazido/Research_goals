@@ -1,9 +1,3 @@
-# from connection import conn
-#
-# my_coonection = conn.get_conn()
-# my_cursor = my_coonection .cursor()
-# my_cursor.fetchall()
-
 import matplotlib.pyplot as plt
 import io
 
@@ -32,6 +26,7 @@ class Queries:
                     ORDER BY COUNT(*) DESC""")
 
             return cursor.fetchall()
+
 
     def finding_new_targets(self):
         with self.connection.cursor() as cursor:
@@ -65,16 +60,35 @@ class Queries:
         x = [r[0] for r in res]
         y = [r[1] for r in res]
         plt.plot(x, y, 'o:r')
+        plt.title(f"visualization_target_trajectory entity_id: {entity_id}")
+        plt.xlabel("Lat")
+        plt.ylabel("Lon")
         img_buf = io.BytesIO()
         plt.savefig(img_buf, format='png')
         plt.close(fig)
         return img_buf
 
 
+    def identification_awakened_cells(self):
+        with self.connection.cursor() as cursor:
+            cursor.execute(
+                """with t_day as(SELECT entity_id ,day(timestamp) as day ,sum(distance_from_last) as total
+                FROM intel_signals
+                WHERE hour(timestamp) BETWEEN 8 and 20
+                GROUP by entity_id ,day(timestamp)) ,
 
 
+                t_nith as(SELECT entity_id ,day(timestamp) as day ,sum(distance_from_last) as total
+                FROM intel_signals
+                WHERE hour(timestamp) BETWEEN 20 and 8
+                GROUP by entity_id ,day(timestamp))
 
-# q = Queries(my_coonection)
-# res = q.visualization_target_trajectory('TGT-003')
 
+                SELECT t_day.entity_id
+                FROM t_day 
+                inner join t_nith
+                on t_day.entity_id = t_nith.entity_id and t_day.day = t_nith.day
+                WHERE t_day.total = 0 and t_nith.total > 10
+                """)
 
+            return cursor.fetchall()
