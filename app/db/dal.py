@@ -1,8 +1,11 @@
-from connection import conn
-
-my_coonection = conn.get_conn()
+# from connection import conn
+#
+# my_coonection = conn.get_conn()
 # my_cursor = my_coonection .cursor()
 # my_cursor.fetchall()
+
+import matplotlib.pyplot as plt
+import io
 
 class Queries:
     def __init__(self,connection):
@@ -43,7 +46,7 @@ class Queries:
             return cursor.fetchall()
 
 
-    def visualization_target_trajectory(self,entity_id):
+    def get_target_trajectory(self,entity_id):
         with self.connection.cursor() as cursor:
 
             sql =   """SELECT reported_lat ,reported_lon
@@ -56,15 +59,22 @@ class Queries:
             return cursor.fetchall()
 
 
+    def visualization_target_trajectory(self,entity_id):
+        res = self.get_target_trajectory(entity_id)
+        fig = plt.figure()
+        x = [r[0] for r in res]
+        y = [r[1] for r in res]
+        plt.plot(x, y, 'o:r')
+        img_buf = io.BytesIO()
+        plt.savefig(img_buf, format='png')
+        plt.close(fig)
+        return img_buf
+
+
+
+
 
 # q = Queries(my_coonection)
 # res = q.visualization_target_trajectory('TGT-003')
-#
-# import matplotlib.pyplot as plt
-#
-#
-# x = [i[0] for i in res]
-# y = [i[1] for i in res]
-# plt.plot(x, y,'o:r')
-#
-# plt.show()
+
+

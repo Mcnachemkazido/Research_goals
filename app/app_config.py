@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-class DbConfig:
+class AppConfig:
 
     @staticmethod
     def get_host():

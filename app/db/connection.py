@@ -21,5 +21,5 @@ class Connection:
             print(e)
             raise
 
-conn = Connection("localhost",3306,"root","root","digital_hunter")
+
 
