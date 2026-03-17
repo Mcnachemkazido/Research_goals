@@ -30,8 +30,21 @@ class Queries:
 
             return cursor.fetchall()
 
+    def finding_new_targets(self):
+        with self.connection.cursor() as cursor:
+            cursor.execute(
+                """SELECT entity_id ,COUNT(*) as total_reports 
+                    FROM intel_signals
+                    WHERE priority_level = 99
+                    GROUP by entity_id 
+                    ORDER by COUNT(*) DESC
+                    LIMIT 3""")
+
+            return cursor.fetchall()
+
+
 
 
 
 q = Queries(my_coonection)
-print(q.analysis_intelligence_sources())
+print(q.finding_new_targets())
