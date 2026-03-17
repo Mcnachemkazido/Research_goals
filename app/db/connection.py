@@ -14,11 +14,12 @@ class Connection:
                 host=self.host,
                port=self.port,
                user=self.user,
-               password=self.password)
+               password=self.password,
+                db=self.db)
 
         except pymysql.err.OperationalError as e :
             print(e)
             raise
 
 conn = Connection("localhost",3306,"root","root","digital_hunter")
-print(conn.get_conn())
+
