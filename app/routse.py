@@ -1,7 +1,7 @@
 from fastapi import APIRouter , Response, BackgroundTasks
-from app.db.connection import Connection
-from app.db.dal import Queries
-from app.app_config import AppConfig
+from db.connection import Connection
+from db.dal import Queries
+from db.app_config import AppConfig
 
 
 
