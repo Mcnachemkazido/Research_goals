@@ -19,5 +19,19 @@ class Queries:
 
             return cursor.fetchall()
 
+
+    def analysis_intelligence_sources(self):
+        with self.connection.cursor() as cursor:
+            cursor.execute(
+                """SELECT signal_type ,COUNT(*) as total_Intelligence_signal
+                    FROM intel_signals
+                    GROUP BY signal_type
+                    ORDER BY COUNT(*) DESC""")
+
+            return cursor.fetchall()
+
+
+
+
 q = Queries(my_coonection)
-print(q.high_priority_movement_alert())
+print(q.analysis_intelligence_sources())
